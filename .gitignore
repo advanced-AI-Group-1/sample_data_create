@@ -1,3 +1,4 @@
 /.idea
 !/unsloth_compiled_cache/
 *.pyc
+/unsloth_compiled_cache
