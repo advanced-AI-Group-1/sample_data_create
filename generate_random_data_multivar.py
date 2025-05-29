@@ -645,17 +645,44 @@ class MultivariateCompanyDataGenerator:
         
         return samples  # 생성된 샘플 데이터 반환
 
+    def _validate_financial_ratios(self, data_dict):
+        issues = []
+        # ROA (자산수익률) 검증: -50% ~ 50%
+        if '당기순이익' in data_dict and '총자산' in data_dict and data_dict['총자산'] > 0:
+            roa = data_dict['당기순이익'] / data_dict['총자산']
+            if abs(roa) > 0.5:
+                issues.append(f"ROA가 비현실적: {roa:.2%}")
+        # 부채비율 검증: 0% ~ 500%
+        if '총부채' in data_dict and '자본총계' in data_dict and data_dict['자본총계'] > 0:
+            debt_ratio = data_dict['총부채'] / data_dict['자본총계']
+            if debt_ratio > 5.0 or debt_ratio < 0:
+                issues.append(f"부채비율이 비현실적: {debt_ratio:.2f}")
+        # 영업이익률 검증: -100% ~ 100%
+        if '영업이익' in data_dict and '매출액' in data_dict and data_dict['매출액'] > 0:
+            operating_margin = data_dict['영업이익'] / data_dict['매출액']
+            if abs(operating_margin) > 1.0:
+                issues.append(f"영업이익률이 비현실적: {operating_margin:.2%}")
+        return len(issues) == 0, issues
+
 #%%
 # 1. 초기화
 generator = MultivariateCompanyDataGenerator(df_multiindex)
 
-samples = generator.plot_distribution_comparison(
-    credit_grade='AAA',
-    num_samples=500,  # 샘플 수 조정
-    save_samples=True,  # CSV로 저장
-    filename='aaa_distribution_samples',  # 파일명 지정
-    percentile_range=(10, 90)  # 퍼센타일 범위 조정
+all_companies = generator.generate_companies_all_grades(
+    num_per_grade=10,
+    percentile_range=(5, 95)  # 5-95 퍼센타일 범위로 제한
 )
+
+generator.save_to_csv(all_companies, "multivariate_generated_companies")
+
+
+# samples = generator.plot_distribution_comparison(
+#     credit_grade='AAA',
+#     num_samples=500,  # 샘플 수 조정
+#     save_samples=True,  # CSV로 저장
+#     filename='aaa_distribution_samples',  # 파일명 지정
+#     percentile_range=(10, 90)  # 퍼센타일 범위 조정
+# )
 
 #%%
 # 사용 예시
