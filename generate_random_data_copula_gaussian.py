@@ -442,21 +442,21 @@ class MultivariateCopulaGenerator:
 generator = MultivariateCopulaGenerator(df_multiindex)
 
 # # 모든 등급에 대해 각각 10개의 기업 생성
-all_companies = generator.generate_companies_all_grades(
-    num_per_grade=10,
-    name_prefix="Company",
-    percentile_range=(10, 90)  # 10-90 퍼센타일 범위로 제한
-)
-
-# # 생성된 데이터 저장
-generator.save_to_csv(all_companies, "copula_generated_companies")
-
-# samples = generator.plot_distribution_comparison(
-#     credit_grade='AAA',
-#     num_samples=1000,
-#     save_samples=True,
-#     percentile_range=(10, 90)
+# all_companies = generator.generate_companies_all_grades(
+#     num_per_grade=10,
+#     name_prefix="Company",
+#     percentile_range=(10, 90)  # 10-90 퍼센타일 범위로 제한
 # )
+
+# # # 생성된 데이터 저장
+# generator.save_to_csv(all_companies, "copula_generated_companies")
+
+samples = generator.plot_distribution_comparison(
+    credit_grade='AAA',
+    num_samples=1000,
+    save_samples=True,
+    percentile_range=(10, 90)
+)
 
 #%%
 """
