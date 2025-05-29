@@ -1,7 +1,7 @@
 #%%
 import pandas as pd
 
-file='fakedata1.csv'
+file='realdata1.csv'
 df=pd.read_csv(file)
 df
 
