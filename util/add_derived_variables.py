@@ -22,11 +22,12 @@ def add_derived_variables(df):
     df["로그총자산"] = np.log10(df["총자산"])
     df["로그총부채"] = np.log10(df["총부채"])
 
+
     return df
 
 #%%
 if __name__ == "__main__":
     df=pd.read_csv(file)
     df=add_derived_variables(df)
-    df.to_csv("./generated_data/multivariate_generated_companies_derived.csv", index=False)
+    df.to_csv("../generated_data/multivariate_generated_companies_derived.csv", index=False)
 

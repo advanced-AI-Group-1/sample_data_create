@@ -455,11 +455,17 @@ generator = MultivariateRejectionSampler(df_multiindex)
 all_companies = generator.generate_companies_all_grades(
     num_per_grade=10,
     name_prefix="Company",
-    percentile_range=(10, 90)  # 10-90 퍼센타일 범위로 제한
+    percentile_range=(5, 95)  # 10-90 퍼센타일 범위로 제한
 )
 
-# 생성된 데이터 저장
-generator.save_to_csv(all_companies, "all_grades_companies")
+generator.save_to_csv(all_companies, "all_grades_companies_multivariate_10")
+
+
+from util.add_derived_variables import add_derived_variables
+all_companies=add_derived_variables(all_companies)
+
+# # 생성된 데이터 저장
+generator.save_to_csv(all_companies, "all_grades_companies_multivariate_derived")
 
 
 #%%

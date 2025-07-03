@@ -69,6 +69,7 @@ class MultivariateCompanyDataGenerator:
         corr_matrix = np.eye(n)  # 단위행렬로 시작
         
         # 현실적인 상관관계 설정
+        # 실제 데이터의 피어슨 상관계수를 구하여 넣어줄 필요 있음
         correlations = {
             ('매출액', '영업이익'): 0.85,
             ('매출액', '당기순이익'): 0.75,
@@ -669,11 +670,14 @@ class MultivariateCompanyDataGenerator:
 generator = MultivariateCompanyDataGenerator(df_multiindex)
 
 all_companies = generator.generate_companies_all_grades(
-    num_per_grade=10,
+    num_per_grade=2000,
     percentile_range=(5, 95)  # 5-95 퍼센타일 범위로 제한
 )
 
-generator.save_to_csv(all_companies, "multivariate_generated_companies")
+from add_derived_variables import add_derived_variables
+all_companies=add_derived_variables(all_companies)
+
+generator.save_to_csv(all_companies, "all_grades_generated_companies")
 
 
 # samples = generator.plot_distribution_comparison(
